@@ -1,21 +1,18 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Score extends Component {
-  static defaultProps = {
-    name: "",
-    score: 0,
-    isScored: false,
-    onScore: () => console.warn("onScore not defined"),
-  };
+const Score = ({ name, isScored, score, onScore }) => {
+  return (
+    <div>
+      {name} | {score} {!isScored && <button onClick={() => onScore(name)}>Select</button>}
+    </div>
+  );
+};
 
-  render() {
-    const { name, isScored, score, onScore } = this.props;
-    return (
-      <div>
-        {name} | {score} {!isScored && <button onClick={() => onScore(name)}>Select</button>}
-      </div>
-    );
-  }
-}
+Score.defaultProps = {
+  name: "",
+  score: 0,
+  isScored: false,
+  onScore: () => console.warn("onScore not defined"),
+};
 
 export default Score;

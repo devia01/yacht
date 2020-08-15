@@ -1,14 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 import Player from "./components/player";
 
-class App extends Component {
-  render() {
-    return (
-      <>
-        <Player></Player>
-      </>
-    );
-  }
-}
+const App = () => {
+  return (
+    <>
+      <Player></Player>
+    </>
+  );
+};
 
 export default App;
