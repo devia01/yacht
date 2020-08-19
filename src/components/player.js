@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import ScoreList from "./scoreList";
 import DiceList from "./diceList";
 
 const Player = () => {
+  const clearDices = useCallback(() => Array.from({length: 5}, (v, index) => ({index: index, value: 0, isSelected: false})), []);
   const [leftTurn, setLeftTurn] = useState(12);
   const [leftRoll, setLeftRoll] = useState(3);
   const [scores, setScores] = useState([
@@ -67,43 +68,17 @@ const Player = () => {
       isScored: false,
     },
   ]);
-  const [dices, setDices] = useState([
-    {
-      index: 0,
-      value: 0,
-      isSelected: false,
-    },
-    {
-      index: 1,
-      value: 0,
-      isSelected: false,
-    },
-    {
-      index: 2,
-      value: 0,
-      isSelected: false,
-    },
-    {
-      index: 3,
-      value: 0,
-      isSelected: false,
-    },
-    {
-      index: 4,
-      value: 0,
-      isSelected: false,
-    },
-  ]);
+  const [dices, setDices] = useState(clearDices);
 
-  const rollDices = () => {
+  const rollDices = useCallback(() => {
     setDices(
       dices.map((dice) =>
         dice.isSelected ? dice : { ...dice, value: Math.floor(Math.random() * 6) + 1 }
       )
     );
-  };
+  }, [dices]);
 
-  const handleRoll = () => {
+  const handleRoll = useCallback(() => {
     if (leftRoll > 0) {
       setLeftRoll(leftRoll - 1);
       rollDices();
@@ -112,9 +87,9 @@ const Player = () => {
       setLeftRoll(2);
       rollDices();
     }
-  };
+  }, [leftTurn, leftRoll, rollDices]);
 
-  const handleScore = (name) => {
+  const handleScore = useCallback((name) => {
     let result = 0;
 
     switch (name) {
@@ -280,45 +255,18 @@ const Player = () => {
     );
     setLeftRoll(3);
     setLeftTurn(leftTurn - 1);
-    setDices([
-      {
-        index: 0,
-        value: 0,
-        isSelected: false,
-      },
-      {
-        index: 1,
-        value: 0,
-        isSelected: false,
-      },
-      {
-        index: 2,
-        value: 0,
-        isSelected: false,
-      },
-      {
-        index: 3,
-        value: 0,
-        isSelected: false,
-      },
-      {
-        index: 4,
-        value: 0,
-        isSelected: false,
-      },
-    ]);
+    setDices(clearDices);
 
     if (leftTurn === 1) {
       alert("Game Over!");
     }
-  };
+  }, [dices, scores, leftTurn, clearDices]);
 
-  const handleSelect = (index) => {
-    console.log(dices[index]);
+  const handleSelect = useCallback((index) => {
     setDices(
       dices.map((dice) => (dice.index === index ? { ...dice, isSelected: !dice.isSelected } : dice))
     );
-  };
+  }, [dices]);
 
   return (
     <div>
