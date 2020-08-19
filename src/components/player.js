@@ -1,9 +1,12 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import ScoreList from "./scoreList";
 import DiceList from "./diceList";
 
+function clearDices() {
+  return Array.from({ length: 5 }, (v, index) => ({ index: index, value: 0, isSelected: false }));
+}
+
 const Player = () => {
-  const clearDices = useCallback(() => Array.from({length: 5}, (v, index) => ({index: index, value: 0, isSelected: false})), []);
   const [leftTurn, setLeftTurn] = useState(12);
   const [leftRoll, setLeftRoll] = useState(3);
   const [scores, setScores] = useState([
@@ -89,184 +92,183 @@ const Player = () => {
     }
   }, [leftTurn, leftRoll, rollDices]);
 
-  const handleScore = useCallback((name) => {
-    let result = 0;
+  const handleScore = useCallback(
+    (name) => {
+      setScores(
+        scores.map((score) => {
+          return score.name === name ? { ...score, isScored: true } : score;
+        })
+      );
+      setLeftRoll(3);
+      setLeftTurn((leftTurn) => leftTurn - 1);
+      setDices(clearDices);
+    },
+    [scores]
+  );
 
-    switch (name) {
-      case "Aces":
-        result = dices.reduce((acc, dice) => {
-          if (dice.value === 1) {
-            return acc + dice.value;
-          }
-          return acc;
-        }, 0);
-        break;
-      case "Deuces":
-        result = dices.reduce((acc, dice) => {
-          if (dice.value === 2) {
-            return acc + dice.value;
-          }
-          return acc;
-        }, 0);
-        break;
-      case "Threes":
-        result = dices.reduce((acc, dice) => {
-          if (dice.value === 3) {
-            return acc + dice.value;
-          }
-          return acc;
-        }, 0);
-        break;
-      case "Fours":
-        result = dices.reduce((acc, dice) => {
-          if (dice.value === 4) {
-            return acc + dice.value;
-          }
-          return acc;
-        }, 0);
-        break;
-      case "Fives":
-        result = dices.reduce((acc, dice) => {
-          if (dice.value === 5) {
-            return acc + dice.value;
-          }
-          return acc;
-        }, 0);
-        break;
-      case "Sixes":
-        result = dices.reduce((acc, dice) => {
-          if (dice.value === 6) {
-            return acc + dice.value;
-          }
-          return acc;
-        }, 0);
-        break;
-      case "Choices":
-        result = dices.reduce((acc, dice) => {
-          return acc + dice.value;
-        }, 0);
-        break;
-      case "4 of a Kind":
-        if (
-          Object.entries(
-            dices
-              .map((dice) => dice.value)
-              .reduce((a, v) => {
-                a[v] = a[v] ? a[v] + 1 : 1;
-                return a;
-              }, {})
-          ).reduce((a, v) => (v[1] >= a[1] ? v : a), [null, 0])[1] >= 4
-        ) {
-          result = dices.reduce((acc, dice) => {
-            return acc + dice.value;
-          }, 0);
-        } else {
-          result = 0;
-        }
-        break;
-      case "Full House":
-        let arr = Object.values(
-          dices
-            .map((dice) => dice.value)
-            .reduce((a, v) => {
-              a[v] = a[v] ? a[v] + 1 : 1;
-              return a;
-            }, {})
-        );
-        if ((arr.includes(2) && arr.includes(3)) || arr.includes(5)) {
-          result = dices.reduce((acc, dice) => {
-            return acc + dice.value;
-          }, 0);
-        } else {
-          result = 0;
-        }
-        break;
-      case "Small Straight":
-        {
-          let cnt = 0;
-          dices
-            .map((dice) => dice.value)
-            .sort((a, z) => a - z)
-            .reduce((prev, current) => {
-              if (current - prev === 1) {
-                cnt += 1;
-                return current;
-              } else {
-                if (cnt < 3) {
-                  cnt = -1;
-                  return -1;
-                }
-                return current;
-              }
-            });
-          if (cnt >= 3) {
-            result = 15;
-          } else {
-            result = 0;
-          }
-        }
-        break;
-      case "Large Straight":
-        {
-          let cnt = 0;
-          dices
-            .map((dice) => dice.value)
-            .sort((a, z) => a - z)
-            .reduce((prev, current) => {
-              if (current - prev === 1) {
-                cnt += 1;
-                return current;
-              } else {
-                cnt = -1;
-                return -1;
-              }
-            });
-          if (cnt >= 4) {
-            result = 30;
-          } else {
-            result = 0;
-          }
-        }
-        break;
-      case "Yacht":
-        if (
-          Object.entries(
-            dices
-              .map((dice) => dice.value)
-              .reduce((a, v) => {
-                a[v] = a[v] ? a[v] + 1 : 1;
-                return a;
-              }, {})
-          ).reduce((a, v) => (v[1] >= a[1] ? v : a), [null, 0])[1] >= 5
-        ) {
-          result = 50;
-        } else {
-          result = 0;
-        }
-        break;
-      default:
-        console.warn("error!");
-    }
-
-    setScores(
-      scores.map((score) => {
-        return score.name === name ? { name, score: result, isScored: true } : score;
-      })
-    );
-    setLeftRoll(3);
-    setLeftTurn(leftTurn - 1);
-    setDices(clearDices);
-
+  useEffect(() => {
     if (leftTurn === 1) {
       alert("Game Over!");
     }
-  }, [dices, scores, leftTurn, clearDices]);
+  });
 
-  const handleSelect = useCallback((index) => {
-    setDices(
-      dices.map((dice) => (dice.index === index ? { ...dice, isSelected: !dice.isSelected } : dice))
+  useEffect(() => {
+    let result = new Array(12);
+
+    result[0] = dices.reduce((acc, dice) => {
+      if (dice.value === 1) {
+        return acc + dice.value;
+      }
+      return acc;
+    }, 0);
+
+    result[1] = dices.reduce((acc, dice) => {
+      if (dice.value === 2) {
+        return acc + dice.value;
+      }
+      return acc;
+    }, 0);
+
+    result[2] = dices.reduce((acc, dice) => {
+      if (dice.value === 3) {
+        return acc + dice.value;
+      }
+      return acc;
+    }, 0);
+
+    result[3] = dices.reduce((acc, dice) => {
+      if (dice.value === 4) {
+        return acc + dice.value;
+      }
+      return acc;
+    }, 0);
+
+    result[4] = dices.reduce((acc, dice) => {
+      if (dice.value === 5) {
+        return acc + dice.value;
+      }
+      return acc;
+    }, 0);
+
+    result[5] = dices.reduce((acc, dice) => {
+      if (dice.value === 6) {
+        return acc + dice.value;
+      }
+      return acc;
+    }, 0);
+
+    result[6] = dices.reduce((acc, dice) => {
+      return acc + dice.value;
+    }, 0);
+
+    if (
+      Object.entries(
+        dices
+          .map((dice) => dice.value)
+          .reduce((a, v) => {
+            a[v] = a[v] ? a[v] + 1 : 1;
+            return a;
+          }, {})
+      ).reduce((a, v) => (v[1] >= a[1] ? v : a), [null, 0])[1] >= 4
+    ) {
+      result[7] = dices.reduce((acc, dice) => {
+        return acc + dice.value;
+      }, 0);
+    } else {
+      result[7] = 0;
+    }
+
+    let arr = Object.values(
+      dices
+        .map((dice) => dice.value)
+        .reduce((a, v) => {
+          a[v] = a[v] ? a[v] + 1 : 1;
+          return a;
+        }, {})
+    );
+    if ((arr.includes(2) && arr.includes(3)) || arr.includes(5)) {
+      result[8] = dices.reduce((acc, dice) => {
+        return acc + dice.value;
+      }, 0);
+    } else {
+      result[8] = 0;
+    }
+
+    {
+      let cnt = 0;
+      dices
+        .map((dice) => dice.value)
+        .sort((a, z) => a - z)
+        .reduce((prev, current) => {
+          if (current - prev === 1) {
+            cnt += 1;
+            return current;
+          } else {
+            if (cnt < 3) {
+              cnt = -1;
+              return -1;
+            }
+            return current;
+          }
+        });
+      if (cnt >= 3) {
+        result[9] = 15;
+      } else {
+        result[9] = 0;
+      }
+    }
+
+    {
+      let cnt = 0;
+      dices
+        .map((dice) => dice.value)
+        .sort((a, z) => a - z)
+        .reduce((prev, current) => {
+          if (current - prev === 1) {
+            cnt += 1;
+            return current;
+          } else {
+            cnt = -1;
+            return -1;
+          }
+        });
+      if (cnt >= 4) {
+        result[10] = 30;
+      } else {
+        result[10] = 0;
+      }
+    }
+
+    if (
+      Object.entries(
+        dices
+          .map((dice) => dice.value)
+          .reduce((a, v) => {
+            a[v] = a[v] ? a[v] + 1 : 1;
+            return a;
+          }, {})
+      ).reduce((a, v) => (v[1] >= a[1] ? v : a), [null, 0])[1] >= 5
+    ) {
+      result[11] = 50;
+    } else {
+      result[11] = 0;
+    }
+
+    setScores((scores) =>
+      scores.map((score, index) => (score.isScored ? score : { ...score, score: result[index] }))
     );
   }, [dices]);
+
+  const handleSelect = useCallback(
+    (index) => {
+      setDices(
+        dices.map((dice) =>
+          dice.index === index ? { ...dice, isSelected: !dice.isSelected } : dice
+        )
+      );
+    },
+    [dices]
+  );
 
   return (
     <div>
