@@ -240,6 +240,7 @@ const Player = () => {
     }
 
     if (
+      dices[0].value !== 0 &&
       Object.entries(
         dices
           .map((dice) => dice.value)
