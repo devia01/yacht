@@ -3,7 +3,49 @@ import ScoreList from "./scoreList";
 import DiceList from "./diceList";
 
 function clearDices() {
-  return Array.from({ length: 5 }, (v, index) => ({ index: index, value: 0, isSelected: false }));
+  return Array.from({ length: 5 }, (_, index) => ({ index: index, value: 0, isSelected: false }));
+}
+
+function sumDices(dices, value = 0) {
+  if (value !== 0) {
+    return dices.reduce((acc, dice) => {
+      if (dice.value === value) {
+        return acc + dice.value;
+      }
+      return acc;
+    }, 0);
+  } else {
+    return dices.reduce((acc, dice) => {
+      return acc + dice.value;
+    }, 0);
+  }
+}
+
+function countDices(dices) {
+  return Object.values(
+    dices
+      .map((dice) => dice.value)
+      .reduce((a, v) => {
+        a[v] = a[v] ? a[v] + 1 : 1;
+        return a;
+      }, {})
+  );
+}
+
+function countStraightDices(dices) {
+  let dicesValue = dices.map((dice) => dice.value).sort((a, z) => a - z);
+  let count = 1;
+  for (let i = 0; i < 5; i++) {
+    if (dicesValue[i + 1] - dicesValue[i] === 1) {
+      count += 1;
+    } else if (dicesValue[i + 1] - dicesValue[i] !== 0) {
+      if (count >= 4) {
+        return count;
+      }
+      count = -1;
+    }
+  }
+  return count;
 }
 
 const Player = () => {
@@ -113,146 +155,42 @@ const Player = () => {
   });
 
   useEffect(() => {
-    let result = new Array(12);
+    let result = new Array(12).fill(0);
+    const count = countDices(dices);
+    const countStraight = countStraightDices(dices);
+    const sum = sumDices(dices);
 
-    result[0] = dices.reduce((acc, dice) => {
-      if (dice.value === 1) {
-        return acc + dice.value;
-      }
-      return acc;
-    }, 0);
-
-    result[1] = dices.reduce((acc, dice) => {
-      if (dice.value === 2) {
-        return acc + dice.value;
-      }
-      return acc;
-    }, 0);
-
-    result[2] = dices.reduce((acc, dice) => {
-      if (dice.value === 3) {
-        return acc + dice.value;
-      }
-      return acc;
-    }, 0);
-
-    result[3] = dices.reduce((acc, dice) => {
-      if (dice.value === 4) {
-        return acc + dice.value;
-      }
-      return acc;
-    }, 0);
-
-    result[4] = dices.reduce((acc, dice) => {
-      if (dice.value === 5) {
-        return acc + dice.value;
-      }
-      return acc;
-    }, 0);
-
-    result[5] = dices.reduce((acc, dice) => {
-      if (dice.value === 6) {
-        return acc + dice.value;
-      }
-      return acc;
-    }, 0);
-
-    result[6] = dices.reduce((acc, dice) => {
-      return acc + dice.value;
-    }, 0);
-
-    if (
-      Object.entries(
-        dices
-          .map((dice) => dice.value)
-          .reduce((a, v) => {
-            a[v] = a[v] ? a[v] + 1 : 1;
-            return a;
-          }, {})
-      ).reduce((a, v) => (v[1] >= a[1] ? v : a), [null, 0])[1] >= 4
-    ) {
-      result[7] = dices.reduce((acc, dice) => {
-        return acc + dice.value;
-      }, 0);
-    } else {
-      result[7] = 0;
+    // Aces ~ Sixes
+    for (let i = 0; i < 6; i++) {
+      result[i] = sumDices(dices, i + 1);
     }
 
-    let arr = Object.values(
-      dices
-        .map((dice) => dice.value)
-        .reduce((a, v) => {
-          a[v] = a[v] ? a[v] + 1 : 1;
-          return a;
-        }, {})
-    );
-    if ((arr.includes(2) && arr.includes(3)) || arr.includes(5)) {
-      result[8] = dices.reduce((acc, dice) => {
-        return acc + dice.value;
-      }, 0);
-    } else {
-      result[8] = 0;
+    // Choices
+    result[6] = sum;
+
+    // 4 of a Kind
+    if (Math.max(...count) >= 4) {
+      result[7] = sum;
     }
 
-    {
-      let cnt = 0;
-      dices
-        .map((dice) => dice.value)
-        .sort((a, z) => a - z)
-        .reduce((prev, current) => {
-          if (current - prev === 1) {
-            cnt += 1;
-            return current;
-          } else {
-            if (cnt < 3) {
-              cnt = -1;
-              return -1;
-            }
-            return current;
-          }
-        });
-      if (cnt >= 3) {
-        result[9] = 15;
-      } else {
-        result[9] = 0;
-      }
+    // Full House
+    if ((count.includes(2) && count.includes(3)) || count.includes(5)) {
+      result[8] = sum;
     }
 
-    {
-      let cnt = 0;
-      dices
-        .map((dice) => dice.value)
-        .sort((a, z) => a - z)
-        .reduce((prev, current) => {
-          if (current - prev === 1) {
-            cnt += 1;
-            return current;
-          } else {
-            cnt = -1;
-            return -1;
-          }
-        });
-      if (cnt >= 4) {
-        result[10] = 30;
-      } else {
-        result[10] = 0;
-      }
+    // Small Straight
+    if (countStraight >= 4) {
+      result[9] = 15;
     }
 
-    if (
-      dices[0].value !== 0 &&
-      Object.entries(
-        dices
-          .map((dice) => dice.value)
-          .reduce((a, v) => {
-            a[v] = a[v] ? a[v] + 1 : 1;
-            return a;
-          }, {})
-      ).reduce((a, v) => (v[1] >= a[1] ? v : a), [null, 0])[1] >= 5
-    ) {
+    // Large Straight
+    if (countStraight >= 5) {
+      result[10] = 30;
+    }
+
+    // Yacht
+    if (dices[0].value !== 0 && count.includes(5)) {
       result[11] = 50;
-    } else {
-      result[11] = 0;
     }
 
     setScores((scores) =>
