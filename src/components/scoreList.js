@@ -11,7 +11,7 @@ const ScoreList = ({ scores, onScore }) => {
     ></Score>
   ));
 
-  return <div>{list}</div>;
+  return <table>{list}</table>;
 };
 
 export default ScoreList;

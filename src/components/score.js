@@ -2,9 +2,12 @@ import React from "react";
 
 const Score = ({ name, isScored, score, onScore }) => {
   return (
-    <div>
-      {name} | {score} {!isScored && <button onClick={() => onScore(name)}>Select</button>}
-    </div>
+    <tr>
+      <td>{name}</td>
+      <td>
+        {score} {!isScored && <button onClick={() => onScore(name)}>Select</button>}
+      </td>
+    </tr>
   );
 };
 
