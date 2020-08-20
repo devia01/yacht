@@ -3,9 +3,9 @@ import React from "react";
 const Score = ({ name, isScored, score, onScore }) => {
   return (
     <tr>
-      <td>{name}</td>
-      <td>
-        {score} {!isScored && <button onClick={() => onScore(name)}>Select</button>}
+      <td className="td_name">{name}</td>
+      <td className="td_score">
+        {isScored ? <span className="score is_scored">{score}</span> : <button className="score" onClick={() => onScore(name)}>{score}</button>}
       </td>
     </tr>
   );

@@ -222,13 +222,15 @@ const Player = () => {
   );
 
   return (
-    <div>
-      Score: {score} | Left Turn: {leftTurn} | Left Roll: {leftRoll}
-      <hr />
-      <ScoreList scores={scores} onScore={handleScore}></ScoreList>
-      <hr />
-      <DiceList dices={dices} onSelect={handleSelect}></DiceList>
-      {leftRoll ? <button onClick={handleRoll}>Roll!</button> : null}
+    <div className="player">
+      <div className="left">
+        <ScoreList scores={scores} onScore={handleScore}></ScoreList>
+      </div>
+      <div className="right">
+        Score: {score} | Left Turn: {leftTurn} | Left Roll: {leftRoll}
+        <DiceList dices={dices} onSelect={handleSelect}></DiceList>
+        {leftRoll ? <button onClick={handleRoll}>Roll!</button> : null}
+      </div>
     </div>
   );
 };
