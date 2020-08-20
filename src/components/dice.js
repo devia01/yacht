@@ -2,12 +2,13 @@ import React from "react";
 
 const Dice = ({ value, index, isSelected, onSelect }) => {
   return (
-    <div>
-      {value}
-      {value === 0 ? null : (
-        <button onClick={() => onSelect(index)}>{isSelected ? "Unselect" : "Select"}</button>
+    <>
+      {isSelected ? (
+        <button className="dice is_selected" onClick={() => onSelect(index)}>{value}</button>
+      ) : (
+        <button className="dice" onClick={() => onSelect(index)}>{value}</button>
       )}
-    </div>
+    </>
   );
 };
 

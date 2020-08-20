@@ -237,9 +237,9 @@ const Player = () => {
         </table>
       </div>
       <div className="right">
-        Left: {leftRoll}
+        <div className="roll">Left: {leftRoll}</div>
         <DiceList dices={dices} onSelect={handleSelect}></DiceList>
-        {leftRoll ? <button onClick={handleRoll}>Roll!</button> : null}
+        {leftRoll ? <button onClick={handleRoll}>Roll!</button> : <button disabled>Roll!</button>}
       </div>
     </div>
   );

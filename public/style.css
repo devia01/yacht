@@ -9,10 +9,11 @@ body {
 
 #root {
   height: 100%;
-  padding: 0 1rem;
 }
 
 .player {
+  box-sizing: border-box;
+  padding: 1rem;
   display: flex;
   align-items: center;
   height: 100%;
@@ -83,4 +84,29 @@ td {
 
 .right {
   flex-grow: 1;
+  height: 90%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.roll {
+  text-align: right;
+  font-size: 1.2rem;
+}
+
+.dices {
+  display: flex;
+  justify-content: space-around;
+}
+
+.dice {
+  font-size: 2rem;
+  width: 3rem;
+  height: 3rem;
+  color: #cccbc8;
+}
+
+.is_selected {
+  color: #404040;
 }

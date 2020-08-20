@@ -12,7 +12,7 @@ const DiceList = ({ dices, onSelect }) => {
     ></Dice>
   ));
 
-  return <div>{list}</div>;
+  return <div className="dices">{list}</div>;
 };
 
 export default DiceList;
