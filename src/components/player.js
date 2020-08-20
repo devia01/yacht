@@ -42,7 +42,7 @@ function countStraightDices(dices) {
       if (count >= 4) {
         return count;
       }
-      count = -1;
+      count = 0;
     }
   }
   return count;
