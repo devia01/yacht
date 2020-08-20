@@ -51,6 +51,7 @@ function countStraightDices(dices) {
 const Player = () => {
   const [leftTurn, setLeftTurn] = useState(12);
   const [leftRoll, setLeftRoll] = useState(3);
+  const [score, setScore] = useState(0);
   const [scores, setScores] = useState([
     {
       name: "Aces",
@@ -152,7 +153,18 @@ const Player = () => {
     if (leftTurn === 1) {
       alert("Game Over!");
     }
-  });
+  }, [leftTurn]);
+
+  useEffect(() => {
+    setScore(
+      scores.reduce((acc, cur) => {
+        if (cur.isScored) {
+          return acc + cur.score;
+        }
+        return acc;
+      }, 0)
+    );
+  }, [scores]);
 
   useEffect(() => {
     let result = new Array(12).fill(0);
@@ -211,7 +223,7 @@ const Player = () => {
 
   return (
     <div>
-      Left Turn: {leftTurn} | Left Roll: {leftRoll}
+      Score: {score} | Left Turn: {leftTurn} | Left Roll: {leftRoll}
       <hr />
       <ScoreList scores={scores} onScore={handleScore}></ScoreList>
       <hr />
