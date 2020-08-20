@@ -224,10 +224,20 @@ const Player = () => {
   return (
     <div className="player">
       <div className="left">
+        <div className="turn">
+          <p>Turn</p>
+          <p>{leftTurn} / 12</p>
+        </div>
         <ScoreList scores={scores} onScore={handleScore}></ScoreList>
+        <table>
+          <tr>
+            <td className="td_name">Total</td>
+            <td className="td_score">{score}</td>
+          </tr>
+        </table>
       </div>
       <div className="right">
-        Score: {score} | Left Turn: {leftTurn} | Left Roll: {leftRoll}
+        Left: {leftRoll}
         <DiceList dices={dices} onSelect={handleSelect}></DiceList>
         {leftRoll ? <button onClick={handleRoll}>Roll!</button> : null}
       </div>

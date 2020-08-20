@@ -67,6 +67,20 @@ td {
   color: #404040;
 }
 
+.turn {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.turn > p:nth-child(1) {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.turn > p:nth-child(2) {
+  font-size: 1.5rem;
+}
+
 .right {
   flex-grow: 1;
 }
