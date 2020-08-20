@@ -150,7 +150,7 @@ const Player = () => {
   );
 
   useEffect(() => {
-    if (leftTurn === 1) {
+    if (leftTurn === 0) {
       alert("Game Over!");
     }
   }, [leftTurn]);
