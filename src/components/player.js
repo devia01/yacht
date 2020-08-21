@@ -34,18 +34,21 @@ function countDices(dices) {
 
 function countStraightDices(dices) {
   let dicesValue = dices.map((dice) => dice.value).sort((a, z) => a - z);
+  let maxCount = 1;
   let count = 1;
+
   for (let i = 0; i < 5; i++) {
     if (dicesValue[i + 1] - dicesValue[i] === 1) {
       count += 1;
-    } else if (dicesValue[i + 1] - dicesValue[i] !== 0) {
-      if (count >= 4) {
-        return count;
+    } else {
+      maxCount = count > maxCount ? count : maxCount;
+      if (dicesValue[i + 1] - dicesValue[i] !== 0) {
+        count = 1;
       }
-      count = 0;
     }
   }
-  return count;
+
+  return maxCount;
 }
 
 const Player = () => {
@@ -214,7 +217,9 @@ const Player = () => {
     (index) => {
       setDices(
         dices.map((dice) =>
-          dice.index === index && dice.value !== 0 ? { ...dice, isSelected: !dice.isSelected } : dice
+          dice.index === index && dice.value !== 0
+            ? { ...dice, isSelected: !dice.isSelected }
+            : dice
         )
       );
     },
