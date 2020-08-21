@@ -24,6 +24,7 @@ body {
   background-color: #fffefa;
   border-radius: 0.75rem;
   margin: 0 1rem;
+  box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0 0 1px rgba(10, 10, 10, 0.02);
 }
 
 table {
@@ -53,6 +54,7 @@ td {
 .score {
   background: inherit;
   border: none;
+  outline: none;
   box-shadow: none;
   border-radius: 0;
   padding: 0;
@@ -96,6 +98,7 @@ td {
 .dices {
   display: flex;
   justify-content: space-around;
+  align-items: center;
 }
 
 .dice {
@@ -136,4 +139,48 @@ td {
 
 .btn_roll:disabled {
   background-color: #d0d0d0;
+}
+
+.dice {
+  padding: 0;
+  background-color: transparent;
+  background-size: cover;
+  border: none;
+  outline: none;
+  transition-duration: 0.25s;
+  transition-property: all;
+  transition-timing-function: ease-in-out;
+  width: 5rem;
+  height: 5rem;
+  filter: drop-shadow(0 0.5em 1em rgba(10, 10, 10, 0.1));
+}
+
+.is_selected {
+  width: 6.5rem;
+  height: 6.5rem;
+  filter: drop-shadow(0 0.5em 1.5em rgba(10, 10, 10, 0.2));
+}
+
+.dice_1 {
+  background-image: url("/dice_1.png");
+}
+
+.dice_2 {
+  background-image: url("/dice_2.png");
+}
+
+.dice_3 {
+  background-image: url("/dice_3.png");
+}
+
+.dice_4 {
+  background-image: url("/dice_4.png");
+}
+
+.dice_5 {
+  background-image: url("/dice_5.png");
+}
+
+.dice_6 {
+  background-image: url("/dice_6.png");
 }

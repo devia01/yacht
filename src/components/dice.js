@@ -4,9 +4,9 @@ const Dice = ({ value, index, isSelected, onSelect }) => {
   return (
     <>
       {isSelected ? (
-        <button className="dice is_selected" onClick={() => onSelect(index)}>{value}</button>
+        <button className={"dice is_selected dice_" + value} onClick={() => onSelect(index)}></button>
       ) : (
-        <button className="dice" onClick={() => onSelect(index)}>{value}</button>
+        <button className={"dice dice_" + value} onClick={() => onSelect(index)}></button>
       )}
     </>
   );
