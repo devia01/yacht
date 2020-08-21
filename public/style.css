@@ -5,6 +5,7 @@ body {
   background-color: #fbf8f1;
   color: #404040;
   font-size: 20px;
+  font-family: 'PT Sans', sans-serif;
 }
 
 #root {
@@ -42,7 +43,7 @@ td {
 }
 
 .td_name {
-  width: 12rem;
+  width: 10rem;
   padding: 0 1rem;
 }
 
