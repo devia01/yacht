@@ -5,7 +5,7 @@ body {
   background-color: #fbf8f1;
   color: #404040;
   font-size: 20px;
-  font-family: 'PT Sans', sans-serif;
+  font-family: "PT Sans", sans-serif;
 }
 
 #root {
@@ -23,10 +23,6 @@ body {
 .left {
   background-color: #fffefa;
   border-radius: 0.75rem;
-  margin: 0 1rem;
-}
-
-.right {
   margin: 0 1rem;
 }
 
@@ -84,6 +80,7 @@ td {
 }
 
 .right {
+  margin: 0 1rem;
   flex-grow: 1;
   height: 90%;
   display: flex;
@@ -110,4 +107,33 @@ td {
 
 .is_selected {
   color: #404040;
+}
+
+.btn_roll {
+  font-size: 1.5rem;
+  align-self: center;
+  border-radius: 2rem;
+  border: none;
+  outline: none;
+  padding: 0.5rem 0;
+  width: 40%;
+  background-color: #b8a38d;
+  color: #fbf8f1;
+  transition: all 0.3s ease;
+}
+
+.btn_roll:hover {
+  background-color: #b19a82;
+}
+
+.btn_roll:active {
+  background-color: #ab9278;
+}
+
+.btn_roll:focus {
+  box-shadow: 0 0 0 3px rgba(171, 146, 120, 0.3);
+}
+
+.btn_roll:disabled {
+  background-color: #d0d0d0;
 }
