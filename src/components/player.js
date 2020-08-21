@@ -140,16 +140,18 @@ const Player = () => {
 
   const handleScore = useCallback(
     (name) => {
-      setScores(
-        scores.map((score) => {
-          return score.name === name ? { ...score, isScored: true } : score;
-        })
-      );
-      setLeftRoll(3);
-      setLeftTurn((leftTurn) => leftTurn - 1);
-      setDices(clearDices);
+      if (leftRoll !== 3) {
+        setScores(
+          scores.map((score) => {
+            return score.name === name ? { ...score, isScored: true } : score;
+          })
+        );
+        setLeftRoll(3);
+        setLeftTurn((leftTurn) => leftTurn - 1);
+        setDices(clearDices);
+      }
     },
-    [scores]
+    [scores, leftRoll]
   );
 
   useEffect(() => {
