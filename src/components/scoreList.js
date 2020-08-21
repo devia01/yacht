@@ -5,6 +5,7 @@ const ScoreList = ({ scores, onScore }) => {
   const list = scores.map((score) => (
     <Score
       name={score.name}
+      key={score.name}
       isScored={score.isScored}
       score={score.score}
       onScore={onScore}
