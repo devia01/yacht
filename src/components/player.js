@@ -214,7 +214,7 @@ const Player = () => {
     (index) => {
       setDices(
         dices.map((dice) =>
-          dice.index === index ? { ...dice, isSelected: !dice.isSelected } : dice
+          dice.index === index && dice.value !== 0 ? { ...dice, isSelected: !dice.isSelected } : dice
         )
       );
     },
