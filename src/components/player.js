@@ -54,7 +54,9 @@ function countStraightDices(dices) {
 const Player = () => {
   const [leftTurn, setLeftTurn] = useState(12);
   const [leftRoll, setLeftRoll] = useState(3);
-  const [score, setScore] = useState(0);
+  const [bonus, setBonus] = useState(0);
+  const [subtotal, setSubtotal] = useState(0);
+  const [total, setTotal] = useState(0);
   const [scores, setScores] = useState([
     {
       name: "Aces",
@@ -161,15 +163,29 @@ const Player = () => {
   }, [leftTurn]);
 
   useEffect(() => {
-    setScore(
-      scores.reduce((acc, cur) => {
-        if (cur.isScored) {
-          return acc + cur.score;
-        }
-        return acc;
-      }, 0)
-    );
-  }, [scores]);
+    const topTotal = scores.slice(0, 6).reduce((acc, cur) => {
+      if (cur.isScored) {
+        return acc + cur.score;
+      }
+      return acc;
+    }, 0);
+
+    const bottomTotal = scores.slice(6).reduce((acc, cur) => {
+      if (cur.isScored) {
+        return acc + cur.score;
+      }
+      return acc;
+    }, 0);
+
+    setSubtotal(topTotal);
+    setTotal(topTotal + bottomTotal + bonus);
+  }, [scores, bonus]);
+
+  useEffect(() => {
+    if (subtotal >= 63) {
+      setBonus(35);
+    }
+  }, [subtotal]);
 
   useEffect(() => {
     let result = new Array(12).fill(0);
@@ -232,21 +248,32 @@ const Player = () => {
     <div className="player">
       <div className="left">
         <div className="turn">
-          <p>Turn</p>
-          <p>{leftTurn} / 12</p>
+          <span>Turn</span>
+          <span>{leftTurn} / 12</span>
         </div>
-        <ScoreList scores={scores} onScore={handleScore}></ScoreList>
-        <table>
-          <tr>
-            <td className="td_name">Total</td>
-            <td className="td_score">{score}</td>
-          </tr>
+        <ScoreList scores={scores} subtotal={subtotal} bonus={bonus} onScore={handleScore}></ScoreList>
+        <table className="total">
+          <tbody>
+            <tr>
+              <td className="td_name">Total</td>
+              <td className="td_score">{total}</td>
+            </tr>
+          </tbody>
         </table>
       </div>
+
       <div className="right">
         <div className="roll">Left: {leftRoll}</div>
         <DiceList dices={dices} onSelect={handleSelect}></DiceList>
-        {leftRoll ? <button className="btn_roll" onClick={handleRoll}>Roll!</button> : <button className="btn_roll" disabled>Roll!</button>}
+        {leftRoll ? (
+          <button className="btn_roll" onClick={handleRoll}>
+            Roll!
+          </button>
+        ) : (
+          <button className="btn_roll" disabled>
+            Roll!
+          </button>
+        )}
       </div>
     </div>
   );
