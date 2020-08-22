@@ -159,6 +159,7 @@ const Player = () => {
   useEffect(() => {
     if (leftTurn === 0) {
       alert("Game Over!");
+      setLeftRoll(0);
     }
   }, [leftTurn]);
 
